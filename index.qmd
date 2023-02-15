@@ -359,7 +359,7 @@ diapo
 ::: {.column width="50%"}
 In FOK strategy, the predicted curve is a linear combination of the observed curves in other locations. Curves are obtined used B-splines.
 
-$$\chi_{s_0} =\sum_{i=1}^n \lambda_i  \chi_{s_i}$$ We obtain also: 
+$$\chi_{s_0} =\sum_{i=1}^n \lambda_i  \chi_{s_i}$$ We obtain also:
 
 -   **functional kiriging ecuations**,
 
@@ -373,10 +373,10 @@ $$\chi_{s_0} =\sum_{i=1}^n \lambda_i  \chi_{s_i}$$ We obtain also:
 
 ![](img/loc-predicted-table.png){width="30%"} ![](img/loc-predicted-curves.png){width="60%"}
 
-We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system  and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
+We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
 
 ::: notes
-We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system  and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
+We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
 :::
 
 ## Regional implications {.smaller background-color="black"}
@@ -473,10 +473,14 @@ We not only compare the relative performance of the extended CAViaR against the 
 
 **By the way of example:**
 
--   In the case that today's PM10 average is 40 $μg/m3$ and the forecast for the one-day-ahead $10%VaR$ is 0.32%, there is a probability of  $10%$ that the PM10 concentration tomorrow is at least 40 × 1.32 = 52.8 μg/m3, thus exceeding both the EU standard and the WHO guideline.
+-   In the case that today's PM10 average is 40 $μg/m3$ and the forecast for the one-day-ahead $10%VaR$ is 0.32%, there is a probability of $10%$ that the PM10 concentration tomorrow is at least 40 × 1.32 = 52.8 μg/m3, thus exceeding both the EU standard and the WHO guideline.
 
 -   It is the municipal environmental authorities that must decide with political-economic-health criteria, which indicate their aversion to risk, whether or not to take any remedial measure and, if so, what measures to take.
 
 ## Thanks
+
+Questions?
+
+gema.faviles@uclm.es
 
 ![](img/cartel.png)
