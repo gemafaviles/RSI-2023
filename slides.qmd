@@ -18,7 +18,7 @@ format:
       buttons: true
     preview-links: auto
     font-size: x-small
-#    logo: img/quarto.png
+#    logo: img/quarto.PNG
     css: styles.css
 #    footer: <https://quarto.org>
 ---
@@ -83,7 +83,7 @@ More about me:
 
 ![Prof. Coro Chasco for inviting me to this session](img/coro.jpeg){width="15%"}
 
-![Prof. José-María Montero for being the main partner of my reseacrh](img/montero.png){width="15%"}
+![Prof. José-María Montero for being the main partner of my reseacrh](img/montero.PNG){width="15%"}
 
 ::: notes
 First of all, I would like to thanks prof. Coro Chasco to the oporutuinty to sharing my research in this interesting meeting.
@@ -97,7 +97,7 @@ Second, I would like to thanks also to prof. Montero for being the main partner 
 ## To show different spatial statistical tools to deal with the air control pollution, specifically NOx and PM10 in the city of Madrid and to show some regional implications.
 :::
 
-![](img/wiley.png){width="20%"} ![](img/journal-jcp.jpg){width="20%"} ![](img/journal-apr.jpg){width="20%"}
+![](img/wiley.PNG){width="20%"} ![](img/journal-jcp.jpg){width="20%"} ![](img/journal-apr.jpg){width="20%"}
 
 ::: notes
 -   The main of the presentation is to show different spatial statistical tools to deal with the air control pollution, specifically NOx and PM10 in the city of Madrid and to show some regional implications.
@@ -167,9 +167,9 @@ diapo
 ## The keystone of kriging {.smaller}
 
 ::: {layout-ncol="2"}
-![**The semivariogram** is the instrument used *par excellence* to describe the spatial dependence in the regionalized variable.](img/semivar-plot.png)
+![**The semivariogram** is the instrument used *par excellence* to describe the spatial dependence in the regionalized variable.](img/semivar-plot.PNG)
 
-![In the spatio-temporal framework the **covariance** function is the most commonly chosen tool.](img/covar-plot.png)
+![In the spatio-temporal framework the **covariance** function is the most commonly chosen tool.](img/covar-plot.PNG)
 :::
 
 ::: notes
@@ -214,9 +214,9 @@ How geostatistics help to the air pollution control?
 ## Prediction of NOx in Madrid
 
 ::: {layout-ncol="2"}
-![Prediction map](img/co-pred.png)
+![Prediction map](img/co-pred.PNG)
 
-![Standar deviation error map](img/co-sd-error.png)
+![Standar deviation error map](img/co-sd-error.PNG)
 :::
 
 ::: notes
@@ -319,7 +319,7 @@ Functional kriging prediction of atmospheric particulate matter concentrations i
 J.M. Montero, G. Fernández-Avilés
 :::
 
-![](img/plot-jcp.png)
+![](img/plot-jcp.PNG)
 
 ::: notes
 The second part of the presentation is in the line of geostatistics, in this case, functional geostatistics.
@@ -335,7 +335,7 @@ In 2010, the city's atmospheric pollution monitoring system was reorganized and 
 
 ::: columns
 ::: {.column width="30%"}
-![](img/madrid-alfombra.png)
+![](img/madrid-alfombra.PNG)
 :::
 
 ::: {.column width="70%"}
@@ -353,7 +353,7 @@ diapo
 
 ::: columns
 ::: {.column width="50%"}
-![](img/functional-kriging.png)
+![](img/functional-kriging.PNG)
 :::
 
 ::: {.column width="50%"}
@@ -371,7 +371,7 @@ $$\chi_{s_0} =\sum_{i=1}^n \lambda_i  \chi_{s_i}$$ We obtain also:
 
 ## Predictions of PM10 functional data in Madrid {.smaller}
 
-![](img/loc-predicted-table.png){width="30%"} ![](img/loc-predicted-curves.png){width="60%"}
+![](img/loc-predicted-table.PNG){width="30%"} ![](img/loc-predicted-curves.PNG){width="60%"}
 
 We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system  and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
 
@@ -383,7 +383,7 @@ We predicted PM10 functional data for the period 2010--2015 at the sites where t
 
 ::: columns
 ::: {.column width="50%"}
-![](img/loc-predicted.png)
+![](img/loc-predicted.PNG)
 
 > Are ecologist right? No, they are not.
 :::
@@ -407,7 +407,7 @@ An extended CAViaR model for early-warning of exceedances of the air pollution s
 L. Sanchis-Marco, J.M. Montero, G. Fernández-Avilés
 :::
 
-![](img/plot-caviar.png)
+![](img/plot-caviar.PNG)
 
 ::: notes
 In this case, our main aim it to provide predictions of PM10 using and extend CAViaR model, that is, a very useful type of modeling in fiance.
@@ -427,7 +427,7 @@ $$VaR_{\lambda, t}= \beta_{\lambda, 0} +\beta_{\lambda, 1}VaR_{\lambda, t-1} + \
 
 ## The case study: Madrid
 
-![](img/pm10-covariables.png)
+![](img/pm10-covariables.PNG)
 
 -   Meteorological conditions indicator (MCI) was constructed by principal component analysis (PCA).
 
@@ -479,4 +479,4 @@ We not only compare the relative performance of the extended CAViaR against the 
 
 ## Thanks
 
-![](img/cartel.png)
+![](img/cartel.PNG)
