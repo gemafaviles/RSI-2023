@@ -1,0 +1,482 @@
+---
+title: "Spatial statistic for the air pollution control in the city of Madrid"
+subtitle: "Regional Science Association"
+author: "Gema Fernández-Avilés"
+date: "`r Sys.Date()`"
+format:
+  revealjs: 
+    theme: styles.css
+    scrollable: true
+    toc-title: Index
+    toc: false
+    number-sections: false
+    slide-number: c/t
+    fig-align: center
+    show-slide-number: all
+    toc_float: true
+    chalkboard: 
+      buttons: true
+    preview-links: auto
+    font-size: x-small
+#    logo: img/quarto.png
+    css: styles.css
+#    footer: <https://quarto.org>
+---
+
+# About me {.smaller}
+
+::: columns
+::: {.column width="20%"}
+![](img/Gema.jpg)
+:::
+
+::: {.column width="50%"}
+1.  **Full Professor in Statistics (Applied Economics)**
+
+2.  **Research lines:**
+
+-   Spatial and spatio-temporal statistics
+
+-   Environment
+
+-   Aplied Economics
+
+3.  Enthusiast of **Data Science** and **R** software
+
+4.  My **true** passion:
+
+-   Esther, Judit and Julia (my three daugthers)
+:::
+
+::: {.column width="30%"}
+More about me:
+
+-   [Personal web](https://blog.uclm.es/gemafaviles/)
+
+-   [ResearcherID WOS](http://www.webofscience.com/wos/author/record/)
+
+-   [Master Data Science (with R Software)](https://blog.uclm.es/tp-mbsba/)
+
+-   [ORCID](https://orcid.org/0000-0001-5934-1916)
+
+-   [LinkedIn](https://www.linkedin.com/in/gema-fern%C3%A1ndez-avil%C3%A9s-calder%C3%B3n-9805a4a3/)
+
+-   [ResearchGate](https://www.researchgate.net/profile/Gema-Fernandez-Aviles)
+:::
+:::
+
+::: notes
+-   Well, thank you very much for your friendly presentation. I have prepared some notes about me.
+
+-   I'm ...
+
+-   My main research lines are...
+
+-   I'm very enthusiast of data science and R software
+
+-   But, I am more esntusta of my 3 beautiful daugthers.
+
+-   More about me in the Social media, but I'm not very active.
+:::
+
+# Acknowledgment to:
+
+![Prof. Coro Chasco for inviting me to this session](img/coro.jpeg){width="15%"}
+
+![Prof. José-María Montero for being the main partner of my reseacrh](img/montero.png){width="15%"}
+
+::: notes
+First of all, I would like to thanks prof. Coro Chasco to the oporutuinty to sharing my research in this interesting meeting.
+
+Second, I would like to thanks also to prof. Montero for being the main partner of the research that I'm going to present today.
+:::
+
+## The main aim
+
+::: callout-warning
+## To show different spatial statistical tools to deal with the air control pollution, specifically NOx and PM10 in the city of Madrid and to show some regional implications.
+:::
+
+![](img/wiley.png){width="20%"} ![](img/journal-jcp.jpg){width="20%"} ![](img/journal-apr.jpg){width="20%"}
+
+::: notes
+-   The main of the presentation is to show different spatial statistical tools to deal with the air control pollution, specifically NOx and PM10 in the city of Madrid and to show some regional implications.
+
+-   I have divided the presentation int 3 parts.
+
+-   First, I'm going to speak from the point of view of spatial and spatio-temporal kriging.
+
+-   Second, we deal with functional kriging.
+
+-   Third, we import methodology from quantitative finance to environmetal field.
+:::
+
+## I. Spatial and spatio-temporal Geostatists {.smaller}
+
+Where does Geostatistics arise?
+
+::: {layout-ncol="2"}
+![**Danie G. Krige** in gold mine in Witwatersrand, South Africa. In 1951, Krige expounded his pioneering plotter of distance-weighted average gold grades at the Witwatersrand reef complex in South Africa.](img/fig-daniel-mina.jpg){width="3%"}
+
+![**Georges Matheron** in École des Mines de Paris, France. The theoretical basis for the method was developed by Matheron in 1960, based on the Master's thesis of Danie G. Krige. He coined the term **"Kriging"** in honor of G. Krige and founded *Ecole des Mines de Paris*.](img/matheron.jpeg){width="5%"}
+:::
+
+::: notes
+Regarding to the first part, the first question is: where does geostatistics arise?
+
+-   Geostatistics arise in 1951, in gold mine in South Africa, with the Phd of Danie G. Krige, who presented his pioneering plotter of distance-weighted average gold grades.
+
+-   Later, in 1960, prof. Matheron develop the theoretical basis of the methods proposed by krige and coined the term of KRIGING in honor of prof. Krige.
+:::
+
+## The idea of kriging {.smaller}
+
+::: panel-tabset
+### Intuitive idea
+
+![](img/fig_lambdas.jpg){width="50%"}
+
+### Theoretical background
+
+Predict the value $Z^\ast (\bf s)$ at the location $\bf s_0$ by $Z^\ast ({\bf s}_0) = \sum\limits_{i = 1}^n {\lambda _i Z(\bf s_i )}$ based on the given values $Z_{\bf s_1},Z_{\bf s_2},\ldots,Z_{\bf s_n}$.
+
+The **Kriging weights** $\lambda_1,\ldots,\lambda_n$ are determined so that the expected squared interpolation error \begin{equation*}
+E((Z^\ast ({\bf s_0})- Z({\bf s_0}))^2) \quad DEPENDS\ ON  \ SEMIVARIOGRAM !!
+\end{equation*} is minimized over all choices of $\lambda_1,\ldots,\lambda_N$.
+
+**Ordinary Kriging**:
+
+```{=tex}
+\begin{equation*}
+\left\{ {\begin{array}{l}
+ \sum\limits_{j = 1}^n {\lambda _j \gamma ({\bf s}_i - {\bf s}_j) + \alpha = 
+ \gamma ({\rm {\bf s}}_i - {\bf s}_0 ),\forall i = 1,...,n} \\
+ \sum\limits_{i = 1}^n {\lambda _i = 1} \; \\
+   \end{array}} \right.
+\end{equation*}
+```
+::: {.fragment .highlight-red}
+**Semivariogram**: $\gamma ({\rm{\bf h}}) = \frac{1}{2}V\left[ {Z({\bf s} + {\bf h}) - Z({\bf s})}\right] \quad *** key *** !!$
+:::
+:::
+
+::: notes
+diapo
+:::
+
+## The keystone of kriging {.smaller}
+
+::: {layout-ncol="2"}
+![**The semivariogram** is the instrument used *par excellence* to describe the spatial dependence in the regionalized variable.](img/semivar-plot.png)
+
+![In the spatio-temporal framework the **covariance** function is the most commonly chosen tool.](img/covar-plot.png)
+:::
+
+::: notes
+diapo
+:::
+
+## A real example {.smaller}
+
+::: callout-warning
+## Wiley (2015)
+
+A spatio-temporal geostatistical approach to predicting pollution levels: The case of mono-nitrogen oxides in Madrid
+
+J.M. Montero, G. Fernández-Avilés
+:::
+
+```{r}
+load("data/madrid-co.RData")
+
+library(dplyr)
+library(sf)
+library(leaflet)
+
+MuniMadrid_sf <- st_as_sf(as.data.frame(MuniMadrid),
+  coords = c("V1", "V2"),
+  crs = st_crs(25830)
+) %>% st_transform(4326)
+ha <- st_as_sf(data.co, coords = c("x", "y"), crs = st_crs(25830)) %>% st_transform(4326)
+dato <- data.co$co
+dato <- sprintf("<strong>Level of CO: %s</strong>", round(data.co$co, 2)) %>% 
+  lapply(htmltools::HTML)
+leaflet(ha) %>%
+  addTiles() %>%
+  addMarkers(popup = dato, clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(radius = 7, color = "red", popup = dato)
+```
+
+::: notes
+How geostatistics help to the air pollution control?
+:::
+
+## Prediction of NOx in Madrid
+
+::: {layout-ncol="2"}
+![Prediction map](img/co-pred.png)
+
+![Standar deviation error map](img/co-sd-error.png)
+:::
+
+::: notes
+It is important to note, that Kriging provides the prediction maps and the standard deviation prediction map also
+:::
+
+## Regional implications {.smaller background-color="black"}
+
+::: columns
+::: {.column width="50%"}
+```{r echo=FALSE, fig.height = 5, fig.width = 5}
+load("data/madrid-co.RData")
+
+library(raster)
+library(sp)
+library(leaflet.providers)
+
+# Paso la predicción a raster y lo proyecto a 4326
+
+pred <- rasterFromXYZ(cbind(loci, kc.co.2s.10h$predict))
+crs(pred) <- st_crs(25830)$proj4string
+# Projecto a lonlat (4326)
+pred <- projectRaster(pred, crs = st_crs(4326)$proj4string)
+
+# Recorto a Madrid
+library(mapSpain)
+Madrid_sf <- esp_get_munic_siane(munic = "^Madrid$", epsg = 4326)
+pred <- mask(pred, Madrid_sf)
+
+# preparo leaflet
+pal <- colorNumeric(hcl.colors(10, "Inferno", rev = TRUE), values(pred),
+  na.color = "transparent"
+)
+
+# Uso una capa con carreteras:
+# https://leaflet-extras.github.io/leaflet-providers/preview/
+leaflet() %>%
+  # Capa fotos
+  addProviderEspTiles("PNOA", group = "Terreno") %>%
+  # Capa callejero
+  addTiles(group = "Callejero") %>%
+  # Capa carreteras
+  addProviderTiles(provider = "Stamen.TonerLines", group = "Carreteras") %>%
+  addRasterImage(pred,
+    colors = pal,
+    opacity = 0.7,
+    group = "Predicción"
+  ) %>%
+  addPolygons(data = Madrid_sf, fill = FALSE) %>%
+  addLayersControl(
+    baseGroups = c("Carreteras", "Terreno", "Callejero"),
+    overlayGroups = c("Predicción"),
+    options = layersControlOptions(collapsed = TRUE)
+  ) %>%
+  addLegend(
+    pal = pal,
+    values = values(pred),
+    title = "NOx (ln)"
+  )
+
+```
+:::
+
+::: {.column width="50%"}
+Madrid has a Low Emission Zone called LEZ
+
+-   January 2022 (inside the ring road M-30).
+
+-   January 2023 (inside and the ring road M-30).
+
+What happen with other areas (USERA, PLAZA ELÍPTICA)?
+
+1.  Madrid Central
+
+2.  **Madrid 360 (December 2021): covers the Downtown area and the Plaza Elíptica area.**
+:::
+:::
+
+::: notes
+What are the regional implications for the city of Madrid of this study?
+
+We can see that the definition of Madrid low zone emisions change over time.
+
+-   Fist, the target was the area inside the ring road M-30,
+
+-   Then, inside and the ring road.
+
+But, what happe with this area?
+
+Now, the political goberment focus on Madrid 360: downtown and usera + plaza elíptica.
+:::
+
+## II. Funciontal geostatistics {.smaller}
+
+::: callout-warning
+## Journal of cleaner production. IF (JCR): 9.30
+
+Functional kriging prediction of atmospheric particulate matter concentrations in Madrid, Spain: Is the new monitoring system masking potential public health problems?
+
+J.M. Montero, G. Fernández-Avilés
+:::
+
+![](img/plot-jcp.png)
+
+::: notes
+The second part of the presentation is in the line of geostatistics, in this case, functional geostatistics.
+
+The study solve an important question. After the reorganization of MS in 2009, are the MS in the most polluted sites?
+
+We predict the PM10 series in the places where the MS with the highest potential concentration of PM10 were removed and in areas heavily traveled by the population.
+:::
+
+## What happen? {.smaller}
+
+In 2010, the city's atmospheric pollution monitoring system was reorganized and ecologist associations suspected that the Municipality of Madrid removed stations from the sites that were potentially the most polluted.
+
+::: columns
+::: {.column width="30%"}
+![](img/madrid-alfombra.png)
+:::
+
+::: {.column width="70%"}
+-   We focus on the spatio-temporal geostatistical (**functional kriging**) approach to predicting particulate matter (PM10) in Madrid.
+
+-   We predict the PM10 series in the places where the MS with the highest potential concentration of PM10 were removed and in areas heavily traveled by the population.
+:::
+:::
+
+::: notes
+diapo
+:::
+
+## The idea of functional kriging {.smaller}
+
+::: columns
+::: {.column width="50%"}
+![](img/functional-kriging.png)
+:::
+
+::: {.column width="50%"}
+In FOK strategy, the predicted curve is a linear combination of the observed curves in other locations. Curves are obtined used B-splines.
+
+$$\chi_{s_0} =\sum_{i=1}^n \lambda_i  \chi_{s_i}$$ We obtain also: 
+
+-   **functional kiriging ecuations**,
+
+-   **prediction varianza** and
+
+-   the **trace-semivariogram** (the keystonelike semivariogram in kriging case).
+:::
+:::
+
+## Predictions of PM10 functional data in Madrid {.smaller}
+
+![](img/loc-predicted-table.png){width="30%"} ![](img/loc-predicted-curves.png){width="60%"}
+
+We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system  and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
+
+::: notes
+We predicted PM10 functional data for the period 2010--2015 at the sites where the MS were eliminated from the system  and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.
+:::
+
+## Regional implications {.smaller background-color="black"}
+
+::: columns
+::: {.column width="50%"}
+![](img/loc-predicted.png)
+
+> Are ecologist right? No, they are not.
+:::
+
+::: {.column width="50%"}
+-   We join the debate on the air pollutant that is most damaging to human health, PM10.
+
+-   Our results indicate that the means (also volatility, skewness and kurtosis) of the functional concentrations of PM10 in the new locations of the MS are similar to corresponding values predicted at the sites where the MS were removed from the system.
+
+-   According to our results, city of Madrid's new APMS fulfills the requirements established by Directive 2008/50/EC.
+:::
+:::
+
+## III. Finantial tools for air quality control {.smaller}
+
+::: callout-warning
+## Atmospheric Pollution Research. IF (JCR): 4.83
+
+An extended CAViaR model for early-warning of exceedances of the air pollution standards. The case of PM10 in the city of Madrid.
+
+L. Sanchis-Marco, J.M. Montero, G. Fernández-Avilés
+:::
+
+![](img/plot-caviar.png)
+
+::: notes
+In this case, our main aim it to provide predictions of PM10 using and extend CAViaR model, that is, a very useful type of modeling in fiance.
+
+We extend the model with meteorological covariables like wind direction, rainfalls, {mean, max, average} temperature...
+
+BUT, like the computation only alows to include one more variable in the model, we create a Meteorological Condition Indicator with PCA
+:::
+
+## The model: extended CAViAR {.smaller}
+
+$$VaR_{\lambda, t}= \beta_{\lambda, 0} +\beta_{\lambda, 1}VaR_{\lambda, t-1} + \beta_{\lambda, 2} |r_{t-1}| + \beta^{*}_\lambda f(X_{t-1}) + e_{\lambda, t}  $$
+
+-   autorregressive non lineal model
+-   estimated by quantile regression
+-   with meteorological covariables
+
+## The case study: Madrid
+
+![](img/pm10-covariables.png)
+
+-   Meteorological conditions indicator (MCI) was constructed by principal component analysis (PCA).
+
+::: notes
+-   source
+-   package
+-   period: 2011 -2021
+:::
+
+## The results
+
+We compare the following models (in-sample and out-sample)
+
+CAViaR
+
+::: {.fragment .highlight-red}
+Extended CAViaR
+:::
+
+EWMA
+
+Garch(1,1)
+
+EVTM-BM
+
+::: notes
+-   Conditional Autoregressive Value at Risk
+
+-   Extended Conditional Autoregressive Value at Risk
+
+We not only compare the relative performance of the extended CAViaR against the standard CAViaR, but also against several established parametric and semi-parametric strategies that are based solely on returns, such a:
+
+-   Exponentially Weighted Moving Average
+
+-   the gaussian GARCH model (Generalized AutoRegressive Conditional Heteroscedasticity)
+
+-   Model that combines GARCH estimation with the block-maxima approach of the Extrem Value Theory
+:::
+
+## Regional implications {.smaller background-color="black"}
+
+-   Our CAViaR approach provides citizens and competent municipal authorities with a set of VaR values (one-day-ahead relative increases of PM10 concentration) and their respective probabilities.
+
+**By the way of example:**
+
+-   In the case that today's PM10 average is 40 $μg/m3$ and the forecast for the one-day-ahead $10%VaR$ is 0.32%, there is a probability of  $10%$ that the PM10 concentration tomorrow is at least 40 × 1.32 = 52.8 μg/m3, thus exceeding both the EU standard and the WHO guideline.
+
+-   It is the municipal environmental authorities that must decide with political-economic-health criteria, which indicate their aversion to risk, whether or not to take any remedial measure and, if so, what measures to take.
+
+## Thanks
+
+![](img/cartel.png)
