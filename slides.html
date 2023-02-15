@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.2.269">
+
+  <meta name="author" content="Gema Fernández-Avilés">
+  <title>Spatial statistic for the air pollution control in the city of Madrid</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link rel="stylesheet" href="styles.css">
+  <link href="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="slides_files/libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+  <script src="slides_files/libs/jquery-1.12.4/jquery.min.js"></script>
+  <link href="slides_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+  <script src="slides_files/libs/leaflet-1.3.1/leaflet.js"></script>
+  <link href="slides_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+  <script src="slides_files/libs/proj4-2.6.2/proj4.min.js"></script>
+  <script src="slides_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+  <link href="slides_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+  <script src="slides_files/libs/leaflet-binding-2.1.1/leaflet.js"></script>
+  <link href="slides_files/libs/leaflet-markercluster-1.0.5/MarkerCluster.css" rel="stylesheet">
+  <link href="slides_files/libs/leaflet-markercluster-1.0.5/MarkerCluster.Default.css" rel="stylesheet">
+  <script src="slides_files/libs/leaflet-markercluster-1.0.5/leaflet.markercluster.js"></script>
+  <script src="slides_files/libs/leaflet-markercluster-1.0.5/leaflet.markercluster.freezable.js"></script>
+  <script src="slides_files/libs/leaflet-markercluster-1.0.5/leaflet.markercluster.layersupport.js"></script>
+  <script src="slides_files/libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+  <script src="slides_files/libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Spatial statistic for the air pollution control in the city of Madrid</h1>
+  <p class="subtitle">Regional Science Association</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Gema Fernández-Avilés 
+</div>
+</div>
+</div>
+
+  <p class="date">2/15/23</p>
+</section>
+<section id="about-me" class="title-slide slide level1 smaller center">
+<h1>About me</h1>
+<div class="columns">
+<div class="column" style="width:20%;">
+<p><img data-src="img/Gema.jpg"></p>
+</div><div class="column" style="width:50%;">
+<ol type="1">
+<li><p><strong>Full Professor in Statistics (Applied Economics)</strong></p></li>
+<li><p><strong>Research lines:</strong></p></li>
+</ol>
+<ul>
+<li><p>Spatial and spatio-temporal statistics</p></li>
+<li><p>Environment</p></li>
+<li><p>Aplied Economics</p></li>
+</ul>
+<ol start="3" type="1">
+<li><p>Enthusiast of <strong>Data Science</strong> and <strong>R</strong> software</p></li>
+<li><p>My <strong>true</strong> passion:</p></li>
+</ol>
+<ul>
+<li>Esther, Judit and Julia (my three daugthers)</li>
+</ul>
+</div><div class="column" style="width:30%;">
+<p>More about me:</p>
+<ul>
+<li><p><a href="https://blog.uclm.es/gemafaviles/">Personal web</a></p></li>
+<li><p><a href="http://www.webofscience.com/wos/author/record/">ResearcherID WOS</a></p></li>
+<li><p><a href="https://blog.uclm.es/tp-mbsba/">Master Data Science (with R Software)</a></p></li>
+<li><p><a href="https://orcid.org/0000-0001-5934-1916">ORCID</a></p></li>
+<li><p><a href="https://www.linkedin.com/in/gema-fern%C3%A1ndez-avil%C3%A9s-calder%C3%B3n-9805a4a3/">LinkedIn</a></p></li>
+<li><p><a href="https://www.researchgate.net/profile/Gema-Fernandez-Aviles">ResearchGate</a></p></li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li><p>Well, thank you very much for your friendly presentation. I have prepared some notes about me.</p></li>
+<li><p>I’m …</p></li>
+<li><p>My main research lines are…</p></li>
+<li><p>I’m very enthusiast of data science and R software</p></li>
+<li><p>But, I am more esntusta of my 3 beautiful daugthers.</p></li>
+<li><p>More about me in the Social media, but I’m not very active.</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+
+<section>
+<section id="acknowledgment-to" class="title-slide slide level1 center">
+<h1>Acknowledgment to:</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/coro.jpeg" style="width:15.0%"></p>
+<p></p><figcaption>Prof.&nbsp;Coro Chasco for inviting me to this session</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/montero.png" style="width:15.0%"></p>
+<p></p><figcaption>Prof.&nbsp;José-María Montero for being the main partner of my reseacrh</figcaption><p></p>
+</figure>
+</div>
+<aside class="notes">
+<p>First of all, I would like to thanks prof. Coro Chasco to the oporutuinty to sharing my research in this interesting meeting.</p>
+<p>Second, I would like to thanks also to prof. Montero for being the main partner of the research that I’m going to present today.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-main-aim" class="slide level2">
+<h2>The main aim</h2>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>To show different spatial statistical tools to deal with the air control pollution, specifically NOx and PM10 in the city of Madrid and to show some regional implications.</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+<p><img data-src="img/wiley.png" style="width:20.0%"> <img data-src="img/journal-jcp.jpg" style="width:20.0%"> <img data-src="img/journal-apr.jpg" style="width:20.0%"></p>
+<aside class="notes">
+<ul>
+<li><p>The main of the presentation is to show different spatial statistical tools to deal with the air control pollution, specifically NOx and PM10 in the city of Madrid and to show some regional implications.</p></li>
+<li><p>I have divided the presentation int 3 parts.</p></li>
+<li><p>First, I’m going to speak from the point of view of spatial and spatio-temporal kriging.</p></li>
+<li><p>Second, we deal with functional kriging.</p></li>
+<li><p>Third, we import methodology from quantitative finance to environmetal field.</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="i.-spatial-and-spatio-temporal-geostatists" class="slide level2 smaller">
+<h2>I. Spatial and spatio-temporal Geostatists</h2>
+<p>Where does Geostatistics arise?</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 37.5%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/fig-daniel-mina.jpg"></p>
+<p></p><figcaption><strong>Danie G. Krige</strong> in gold mine in Witwatersrand, South Africa. In 1951, Krige expounded his pioneering plotter of distance-weighted average gold grades at the Witwatersrand reef complex in South Africa.</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 62.5%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/matheron.jpeg"></p>
+<p></p><figcaption><strong>Georges Matheron</strong> in École des Mines de Paris, France. The theoretical basis for the method was developed by Matheron in 1960, based on the Master’s thesis of Danie G. Krige. He coined the term <strong>“Kriging”</strong> in honor of G. Krige and founded <em>Ecole des Mines de Paris</em>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Regarding to the first part, the first question is: where does geostatistics arise?</p>
+<ul>
+<li><p>Geostatistics arise in 1951, in gold mine in South Africa, with the Phd of Danie G. Krige, who presented his pioneering plotter of distance-weighted average gold grades.</p></li>
+<li><p>Later, in 1960, prof. Matheron develop the theoretical basis of the methods proposed by krige and coined the term of KRIGING in honor of prof. Krige.</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-idea-of-kriging" class="slide level2 smaller">
+<h2>The idea of kriging</h2>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Intuitive idea</a></li><li><a href="#tabset-1-2">Theoretical background</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<p><img data-src="img/fig_lambdas.jpg" style="width:50.0%"></p>
+</div>
+<div id="tabset-1-2">
+<p>Predict the value <span class="math inline">\(Z^\ast (\bf s)\)</span> at the location <span class="math inline">\(\bf s_0\)</span> by <span class="math inline">\(Z^\ast ({\bf s}_0) = \sum\limits_{i = 1}^n {\lambda _i Z(\bf s_i )}\)</span> based on the given values <span class="math inline">\(Z_{\bf s_1},Z_{\bf s_2},\ldots,Z_{\bf s_n}\)</span>.</p>
+<p>The <strong>Kriging weights</strong> <span class="math inline">\(\lambda_1,\ldots,\lambda_n\)</span> are determined so that the expected squared interpolation error <span class="math display">\[\begin{equation*}
+E((Z^\ast ({\bf s_0})- Z({\bf s_0}))^2) \quad DEPENDS\ ON  \ SEMIVARIOGRAM !!
+\end{equation*}\]</span> is minimized over all choices of <span class="math inline">\(\lambda_1,\ldots,\lambda_N\)</span>.</p>
+<p><strong>Ordinary Kriging</strong>:</p>
+<span class="math display">\[\begin{equation*}
+\left\{ {\begin{array}{l}
+\sum\limits_{j = 1}^n {\lambda _j \gamma ({\bf s}_i - {\bf s}_j) + \alpha =
+\gamma ({\rm {\bf s}}_i - {\bf s}_0 ),\forall i = 1,...,n} \\
+\sum\limits_{i = 1}^n {\lambda _i = 1} \; \\
+   \end{array}} \right.
+\end{equation*}\]</span>
+<div class="fragment highlight-red">
+<p><strong>Semivariogram</strong>: <span class="math inline">\(\gamma ({\rm{\bf h}}) = \frac{1}{2}V\left[ {Z({\bf s} + {\bf h}) - Z({\bf s})}\right] \quad *** key *** !!\)</span></p>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>diapo</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-keystone-of-kriging" class="slide level2 smaller">
+<h2>The keystone of kriging</h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/semivar-plot.png"></p>
+<p></p><figcaption><strong>The semivariogram</strong> is the instrument used <em>par excellence</em> to describe the spatial dependence in the regionalized variable.</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/covar-plot.png"></p>
+<p></p><figcaption>In the spatio-temporal framework the <strong>covariance</strong> function is the most commonly chosen tool.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>diapo</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="a-real-example" class="slide level2 smaller">
+<h2>A real example</h2>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Wiley (2015)</strong></p>
+</div>
+<div class="callout-content">
+<p>A spatio-temporal geostatistical approach to predicting pollution levels: The case of mono-nitrogen oxides in Madrid</p>
+<p>J.M. Montero, G. Fernández-Avilés</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="htmlwidget-6cd4bbb35d7be8eda87d" style="width:960px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6cd4bbb35d7be8eda87d">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[40.4232373919687,40.4199734057765,40.4248457631501,40.4789473082719,40.4383767125279,40.4304181593727,40.4222956963889,40.4028201412062,40.445901918285,40.4522437790507,40.4293625716291,40.3888614179574,40.3858168651033,40.4689664775136,40.4407518015941,40.395483800577,40.4085647292214,40.408673098544,40.4417823585764,40.4071369199676,40.4508909970024,40.4207928536065,40.3800028526005],[-3.69194959680356,-3.70323633242671,-3.71212849806534,-3.71155072793823,-3.69092732785467,-3.68031562147272,-3.68235461718952,-3.69356911590012,-3.70650875627907,-3.67730713513549,-3.66857607807552,-3.65154177030991,-3.71673983580238,-3.68868833618176,-3.63927445660114,-3.73189624085894,-3.7419356978541,-3.64529143632041,-3.71836774601774,-3.71280630043627,-3.60442807893329,-3.74926944876749,-3.60258071055856],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["<strong>Level of CO: 0.95<\/strong>","<strong>Level of CO: 1.02<\/strong>","<strong>Level of CO: 0.9<\/strong>","<strong>Level of CO: 0.9<\/strong>","<strong>Level of CO: 1.19<\/strong>","<strong>Level of CO: 0.92<\/strong>","<strong>Level of CO: 1.05<\/strong>","<strong>Level of CO: 1.32<\/strong>","<strong>Level of CO: 1.26<\/strong>","<strong>Level of CO: 0.68<\/strong>","<strong>Level of CO: 0.98<\/strong>","<strong>Level of CO: 0.41<\/strong>","<strong>Level of CO: 1.62<\/strong>","<strong>Level of CO: 0.71<\/strong>","<strong>Level of CO: 0.64<\/strong>","<strong>Level of CO: 1.44<\/strong>","<strong>Level of CO: 0.74<\/strong>","<strong>Level of CO: 0.97<\/strong>","<strong>Level of CO: 0.97<\/strong>","<strong>Level of CO: 0.98<\/strong>","<strong>Level of CO: 0.51<\/strong>","<strong>Level of CO: 0.08<\/strong>","<strong>Level of CO: 0.22<\/strong>"],null,{"showCoverageOnHover":true,"zoomToBoundsOnClick":true,"spiderfyOnMaxZoom":true,"removeOutsideVisibleBounds":true,"spiderLegPolylineOptions":{"weight":1.5,"color":"#222","opacity":0.5},"freezeAtZoom":false},null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[40.4232373919687,40.4199734057765,40.4248457631501,40.4789473082719,40.4383767125279,40.4304181593727,40.4222956963889,40.4028201412062,40.445901918285,40.4522437790507,40.4293625716291,40.3888614179574,40.3858168651033,40.4689664775136,40.4407518015941,40.395483800577,40.4085647292214,40.408673098544,40.4417823585764,40.4071369199676,40.4508909970024,40.4207928536065,40.3800028526005],[-3.69194959680356,-3.70323633242671,-3.71212849806534,-3.71155072793823,-3.69092732785467,-3.68031562147272,-3.68235461718952,-3.69356911590012,-3.70650875627907,-3.67730713513549,-3.66857607807552,-3.65154177030991,-3.71673983580238,-3.68868833618176,-3.63927445660114,-3.73189624085894,-3.7419356978541,-3.64529143632041,-3.71836774601774,-3.71280630043627,-3.60442807893329,-3.74926944876749,-3.60258071055856],7,null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.2},null,null,["<strong>Level of CO: 0.95<\/strong>","<strong>Level of CO: 1.02<\/strong>","<strong>Level of CO: 0.9<\/strong>","<strong>Level of CO: 0.9<\/strong>","<strong>Level of CO: 1.19<\/strong>","<strong>Level of CO: 0.92<\/strong>","<strong>Level of CO: 1.05<\/strong>","<strong>Level of CO: 1.32<\/strong>","<strong>Level of CO: 1.26<\/strong>","<strong>Level of CO: 0.68<\/strong>","<strong>Level of CO: 0.98<\/strong>","<strong>Level of CO: 0.41<\/strong>","<strong>Level of CO: 1.62<\/strong>","<strong>Level of CO: 0.71<\/strong>","<strong>Level of CO: 0.64<\/strong>","<strong>Level of CO: 1.44<\/strong>","<strong>Level of CO: 0.74<\/strong>","<strong>Level of CO: 0.97<\/strong>","<strong>Level of CO: 0.97<\/strong>","<strong>Level of CO: 0.98<\/strong>","<strong>Level of CO: 0.51<\/strong>","<strong>Level of CO: 0.08<\/strong>","<strong>Level of CO: 0.22<\/strong>"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[40.3800028526005,40.4789473082719],"lng":[-3.74926944876749,-3.60258071055856]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<aside class="notes">
+<p>How geostatistics help to the air pollution control?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="prediction-of-nox-in-madrid" class="slide level2">
+<h2>Prediction of NOx in Madrid</h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/co-pred.png"></p>
+<p></p><figcaption>Prediction map</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/co-sd-error.png"></p>
+<p></p><figcaption>Standar deviation error map</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>It is important to note, that Kriging provides the prediction maps and the standard deviation prediction map also</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="regional-implications" class="slide level2 smaller" data-background-color="black">
+<h2>Regional implications</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div id="htmlwidget-273c9bd1c0ad4ccb1191" style="width:480px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-273c9bd1c0ad4ccb1191">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://www.ign.es/wmts/pnoa-ma?service=WMTS&request=GetTile&version=1.0.0&Format=image/png&layer=OI.OrthoimageCoverage&style=default&tilematrixset=GoogleMapsCompatible&TileMatrix={z}&TileRow={y}&TileCol={x}",null,"Terreno",{"minZoom":"4","maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"<a href='http://www.ign.es/'>Infraestructura de Datos Espaciales de Espa&ntilde;a (IDEE)<\/a>"}]},{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,"Callejero",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addProviderTiles","args":["Stamen.TonerLines",null,"Carreteras",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addRasterImage","args":["data:image/png;base64,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",[[40.6894608158682,-3.92938954431198],[40.2711408158682,-3.47920954431197]],0.7,null,null,"Predicción"]},{"method":"addPolygons","args":[[[[{"lng":[-3.6364544,-3.6547903,-3.6611691,-3.6680685,-3.6667366,-3.6859865,-3.6965966,-3.7112007,-3.734655,-3.7411915,-3.7784959,-3.8034784,-3.8001447,-3.8103799,-3.8067843,-3.8145803,-3.8416811,-3.8586686,-3.8682471,-3.8837333,-3.889091,-3.8850868,-3.8738541,-3.8539888,-3.8530823,-3.836604,-3.8367582,-3.8343618,-3.8025217,-3.792942,-3.7901775,-3.7708828,-3.7707861,-3.780471,-3.7743171,-3.7814142,-3.8030936,-3.8347724,-3.8106378,-3.8070071,-3.7879178,-3.7805113,-3.7578471,-3.7211679,-3.7251849,-3.7126157,-3.6934448,-3.6489686,-3.6108205,-3.5762257,-3.5848024,-3.5533734,-3.5426495,-3.5292118,-3.5209375,-3.5195182,-3.5311901,-3.5306078,-3.5397311,-3.5776408,-3.5791373,-3.5737689,-3.5634061,-3.5311884,-3.5342949,-3.5271455,-3.5258329,-3.5340253,-3.5416212,-3.5539637,-3.554332,-3.5715559,-3.5933979,-3.6031334,-3.6148475,-3.6446452,-3.6586819,-3.667046,-3.6780903,-3.6697636,-3.6883876,-3.7006625,-3.6742753,-3.6614527,-3.6497739,-3.6255155,-3.6020111,-3.6263642,-3.6364544],"lat":[40.6361462,40.6429036,40.6404034,40.6295714,40.6199308,40.6075033,40.5899901,40.5831085,40.5852409,40.5907755,40.6017549,40.6015837,40.6053815,40.6092199,40.6015607,40.5949567,40.5923031,40.5881241,40.5923226,40.5855388,40.5707326,40.5609258,40.5573268,40.5248999,40.5111323,40.5062979,40.4750184,40.4644143,40.4619912,40.4537601,40.4422658,40.4439546,40.4293068,40.4216743,40.4020672,40.3941728,40.3921053,40.3961196,40.3638906,40.3665917,40.3587413,40.3618907,40.3572576,40.3654021,40.3346922,40.3238604,40.3207426,40.3333611,40.3144335,40.3151516,40.3216312,40.3559393,40.3931614,40.389476,40.3921172,40.4098082,40.4200842,40.4146715,40.4110366,40.413663,40.4331566,40.4377048,40.4364224,40.4466785,40.4526775,40.4538455,40.4700135,40.4722461,40.4941384,40.501224,40.5115553,40.5132642,40.5017939,40.5016805,40.5114654,40.5083931,40.5123229,40.5249684,40.5267148,40.534682,40.5696346,40.5787407,40.5889604,40.5924397,40.5774706,40.5734244,40.5912334,40.6175444,40.6361462]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":false,"fillColor":"#03F","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Carreteras","Terreno","Callejero"],"Predicción",{"collapsed":true,"autoZIndex":true,"position":"topright"}]},{"method":"addLegend","args":[{"colors":["#FFFE9E , #FFF591 2.10306846031646%, #F9B842 16.4236005999791%, #F47A32 30.7441327396417%, #D54167 45.0646648793043%, #A21C73 59.3851970189669%, #671264 73.7057291586295%, #2B1240 88.0262612982922%, #040404 "],"labels":["0.2","0.4","0.6","0.8","1.0","1.2","1.4"],"na_color":null,"na_label":"NA","opacity":0.5,"position":"topright","type":"numeric","title":"NOx (ln)","extra":{"p_1":0.0210306846031646,"p_n":0.880262612982922},"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[40.2711408158682,40.6894608158682],"lng":[-3.92938954431198,-3.47920954431197]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>Madrid has a Low Emission Zone called LEZ</p>
+<ul>
+<li><p>January 2022 (inside the ring road M-30).</p></li>
+<li><p>January 2023 (inside and the ring road M-30).</p></li>
+</ul>
+<p>What happen with other areas (USERA, PLAZA ELÍPTICA)?</p>
+<ol type="1">
+<li><p>Madrid Central</p></li>
+<li><p><strong>Madrid 360 (December 2021): covers the Downtown area and the Plaza Elíptica area.</strong></p></li>
+</ol>
+</div>
+</div>
+<aside class="notes">
+<p>What are the regional implications for the city of Madrid of this study?</p>
+<p>We can see that the definition of Madrid low zone emisions change over time.</p>
+<ul>
+<li><p>Fist, the target was the area inside the ring road M-30,</p></li>
+<li><p>Then, inside and the ring road.</p></li>
+</ul>
+<p>But, what happe with this area?</p>
+<p>Now, the political goberment focus on Madrid 360: downtown and usera + plaza elíptica.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="ii.-funciontal-geostatistics" class="slide level2 smaller">
+<h2>II. Funciontal geostatistics</h2>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Journal of cleaner production. IF (JCR): 9.30</strong></p>
+</div>
+<div class="callout-content">
+<p>Functional kriging prediction of atmospheric particulate matter concentrations in Madrid, Spain: Is the new monitoring system masking potential public health problems?</p>
+<p>J.M. Montero, G. Fernández-Avilés</p>
+</div>
+</div>
+</div>
+
+<img data-src="img/plot-jcp.png" class="r-stretch"><aside class="notes">
+<p>The second part of the presentation is in the line of geostatistics, in this case, functional geostatistics.</p>
+<p>The study solve an important question. After the reorganization of MS in 2009, are the MS in the most polluted sites?</p>
+<p>We predict the PM10 series in the places where the MS with the highest potential concentration of PM10 were removed and in areas heavily traveled by the population.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="what-happen" class="slide level2 smaller">
+<h2>What happen?</h2>
+<p>In 2010, the city’s atmospheric pollution monitoring system was reorganized and ecologist associations suspected that the Municipality of Madrid removed stations from the sites that were potentially the most polluted.</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img data-src="img/madrid-alfombra.png"></p>
+</div><div class="column" style="width:70%;">
+<ul>
+<li><p>We focus on the spatio-temporal geostatistical (<strong>functional kriging</strong>) approach to predicting particulate matter (PM10) in Madrid.</p></li>
+<li><p>We predict the PM10 series in the places where the MS with the highest potential concentration of PM10 were removed and in areas heavily traveled by the population.</p></li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<p>diapo</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-idea-of-functional-kriging" class="slide level2 smaller">
+<h2>The idea of functional kriging</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="img/functional-kriging.png"></p>
+</div><div class="column" style="width:50%;">
+<p>In FOK strategy, the predicted curve is a linear combination of the observed curves in other locations. Curves are obtined used B-splines.</p>
+<p><span class="math display">\[\chi_{s_0} =\sum_{i=1}^n \lambda_i  \chi_{s_i}\]</span> We obtain also:</p>
+<ul>
+<li><p><strong>functional kiriging ecuations</strong>,</p></li>
+<li><p><strong>prediction varianza</strong> and</p></li>
+<li><p>the <strong>trace-semivariogram</strong> (the keystonelike semivariogram in kriging case).</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="predictions-of-pm10-functional-data-in-madrid" class="slide level2 smaller">
+<h2>Predictions of PM10 functional data in Madrid</h2>
+<p><img data-src="img/loc-predicted-table.png" style="width:30.0%"> <img data-src="img/loc-predicted-curves.png" style="width:60.0%"></p>
+<p>We predicted PM10 functional data for the period 2010–2015 at the sites where the MS were eliminated from the system and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.</p>
+<aside class="notes">
+<p>We predicted PM10 functional data for the period 2010–2015 at the sites where the MS were eliminated from the system and compared them with the functional concentrations corresponding to the sites where the MS are currently located, in order to either confirm or reject the suspicions of the ecologist groups.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="regional-implications-1" class="slide level2 smaller" data-background-color="black">
+<h2>Regional implications</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="img/loc-predicted.png"></p>
+<blockquote>
+<p>Are ecologist right? No, they are not.</p>
+</blockquote>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>We join the debate on the air pollutant that is most damaging to human health, PM10.</p></li>
+<li><p>Our results indicate that the means (also volatility, skewness and kurtosis) of the functional concentrations of PM10 in the new locations of the MS are similar to corresponding values predicted at the sites where the MS were removed from the system.</p></li>
+<li><p>According to our results, city of Madrid’s new APMS fulfills the requirements established by Directive 2008/50/EC.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="iii.-finantial-tools-for-air-quality-control" class="slide level2 smaller">
+<h2>III. Finantial tools for air quality control</h2>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Atmospheric Pollution Research. IF (JCR): 4.83</strong></p>
+</div>
+<div class="callout-content">
+<p>An extended CAViaR model for early-warning of exceedances of the air pollution standards. The case of PM10 in the city of Madrid.</p>
+<p>L. Sanchis-Marco, J.M. Montero, G. Fernández-Avilés</p>
+</div>
+</div>
+</div>
+
+<img data-src="img/plot-caviar.png" class="r-stretch"><aside class="notes">
+<p>In this case, our main aim it to provide predictions of PM10 using and extend CAViaR model, that is, a very useful type of modeling in fiance.</p>
+<p>We extend the model with meteorological covariables like wind direction, rainfalls, {mean, max, average} temperature…</p>
+<p>BUT, like the computation only alows to include one more variable in the model, we create a Meteorological Condition Indicator with PCA</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-model-extended-caviar" class="slide level2 smaller">
+<h2>The model: extended CAViAR</h2>
+<p><span class="math display">\[VaR_{\lambda, t}= \beta_{\lambda, 0} +\beta_{\lambda, 1}VaR_{\lambda, t-1} + \beta_{\lambda, 2} |r_{t-1}| + \beta^{*}_\lambda f(X_{t-1}) + e_{\lambda, t}  \]</span></p>
+<ul>
+<li>autorregressive non lineal model</li>
+<li>estimated by quantile regression</li>
+<li>with meteorological covariables</li>
+</ul>
+</section>
+<section id="the-case-study-madrid" class="slide level2">
+<h2>The case study: Madrid</h2>
+
+<img data-src="img/pm10-covariables.png" class="r-stretch"><ul>
+<li>Meteorological conditions indicator (MCI) was constructed by principal component analysis (PCA).</li>
+</ul>
+<aside class="notes">
+<ul>
+<li>source</li>
+<li>package</li>
+<li>period: 2011 -2021</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-results" class="slide level2">
+<h2>The results</h2>
+<p>We compare the following models (in-sample and out-sample)</p>
+<p>CAViaR</p>
+<div class="fragment highlight-red">
+<p>Extended CAViaR</p>
+</div>
+<p>EWMA</p>
+<p>Garch(1,1)</p>
+<p>EVTM-BM</p>
+<aside class="notes">
+<ul>
+<li><p>Conditional Autoregressive Value at Risk</p></li>
+<li><p>Extended Conditional Autoregressive Value at Risk</p></li>
+</ul>
+<p>We not only compare the relative performance of the extended CAViaR against the standard CAViaR, but also against several established parametric and semi-parametric strategies that are based solely on returns, such a:</p>
+<ul>
+<li><p>Exponentially Weighted Moving Average</p></li>
+<li><p>the gaussian GARCH model (Generalized AutoRegressive Conditional Heteroscedasticity)</p></li>
+<li><p>Model that combines GARCH estimation with the block-maxima approach of the Extrem Value Theory</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="regional-implications-2" class="slide level2 smaller" data-background-color="black">
+<h2>Regional implications</h2>
+<ul>
+<li>Our CAViaR approach provides citizens and competent municipal authorities with a set of VaR values (one-day-ahead relative increases of PM10 concentration) and their respective probabilities.</li>
+</ul>
+<p><strong>By the way of example:</strong></p>
+<ul>
+<li><p>In the case that today’s PM10 average is 40 <span class="math inline">\(μg/m3\)</span> and the forecast for the one-day-ahead <span class="math inline">\(10%VaR\)</span> is 0.32%, there is a probability of <span class="math inline">\(10%\)</span> that the PM10 concentration tomorrow is at least 40 × 1.32 = 52.8 μg/m3, thus exceeding both the EU standard and the WHO guideline.</p></li>
+<li><p>It is the municipal environmental authorities that must decide with political-economic-health criteria, which indicate their aversion to risk, whether or not to take any remedial measure and, if so, what measures to take.</p></li>
+</ul>
+</section>
+<section id="thanks" class="slide level2">
+<h2>Thanks</h2>
+
+<img data-src="img/cartel.png" class="r-stretch"><div class="footer footer-default">
+
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
